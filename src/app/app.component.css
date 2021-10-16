@@ -1,0 +1,8 @@
+#mapid { 
+    height: 100vh; 
+}
+
+.main-container{
+    z-index: 2;
+    position: fixed;
+}

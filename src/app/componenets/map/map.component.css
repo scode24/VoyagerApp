@@ -1,0 +1,61 @@
+#mapid { 
+    height: 70vh; 
+    flex: 2;
+}
+
+.tab-container{
+    padding-left: 250px;
+    padding-right: 250px;
+    text-align: justify;
+}
+
+.playground{
+    display: flex;
+    flex-direction: row;
+}
+
+.question-card{
+    width: 20%;
+}
+
+.map-card{
+    width: 80%;
+}
+
+/* .game-over{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    width: 100vw;
+}
+
+.game-over-info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+} */
+
+@media (max-width: 500px){
+    .playground{
+        display: flex;
+        /* flex-direction: column-reverse; */
+        flex-direction: column;
+    }
+
+    #mapid { 
+        flex: 1;
+        /* height: 90%; */
+        height: 50vh;
+    }
+
+    .question-card{
+        width: 80%;
+    }
+
+    .tab-container{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
