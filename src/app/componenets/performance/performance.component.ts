@@ -25,9 +25,10 @@ export class PerformanceComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-
     if (this.bkpStateList.length == 0 || this.isNewGame) {
-      this.bkpStateList = [...this.stateList];
+      if (this.stateList != undefined) {
+        this.bkpStateList = [...this.stateList];
+      }
     }
 
     if (this.stateMap.size == 0) {
