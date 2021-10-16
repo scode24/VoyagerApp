@@ -60,6 +60,7 @@ export class MapComponent implements OnInit {
       this.stateQuestionMap.clear();
       this.statecorrectStateMap.clear();
       this.noOfAllowedWrongAttempts = environment.gameConfig.noOfAllowedWrongAttempts;
+      this.lastCoordinate = null;
       this.setUpMap();
       this.locationNo = 1;
     } else {
@@ -112,6 +113,10 @@ export class MapComponent implements OnInit {
   }
 
   setUpMap() {
+    if (this.map != undefined) {
+      this.map.remove();
+    }
+
     navigator.geolocation.getCurrentPosition(position => {
 
       this.map = L.map('mapid').setView([position.coords.latitude, position.coords.longitude], this.defaultZoomLevel);
@@ -131,7 +136,8 @@ export class MapComponent implements OnInit {
 
   placeMarker(coordinate: any, lastCoordinate: any) {
 
-    const marker = L.marker([coordinate.lat, coordinate.lng]).addTo(this.map);
+    const marker = L.marker([coordinate.lat, coordinate.lng]); //.addTo(this.map);
+    this.map.addLayer(marker);
     // marker.bindPopup("You are here").openPopup();
 
     if (lastCoordinate != null) {
