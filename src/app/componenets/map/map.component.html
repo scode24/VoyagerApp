@@ -15,6 +15,10 @@
                 <ng-template [ngIf]="noOfAllowedWrongAttempts > 0">
                     <mat-card-header>
                         <mat-card-title>Location {{locationNo}}</mat-card-title>
+
+                        <mat-icon style="margin-left: auto;" (click)="reloadImage()" matTooltip="Change question">
+                            refresh</mat-icon>
+
                     </mat-card-header>
                     <ng-template [ngIf]="isImageLoading">
                         <mat-spinner [diameter]="30"></mat-spinner>Loading image...
@@ -24,7 +28,6 @@
                         <img class="loc-image" mat-card-image [src]="photoUrl">
 
                         <mat-card-content>
-                            <p><a href="#" (click)="reloadImage()">Image not loaded ? Change question</a></p>
                             <p>
                                 This location belongs to
                             </p>
@@ -71,7 +74,8 @@
             landscape across our country. You will be staring from one point and you will be travelling from one state
             to another by identifying photo and name of your next destination. There will be total
             {{noOfAllowedWrongAttemptsBkp}} consecutive
-            wrong attempts are allowed. And your path will be marked on the map.
+            wrong attempts are allowed. Also there is negative marking in score. Each wrong attempt will deduct score by
+            {{scoreDeductBy}}. Your path will be marked on the map.
             Try to cover as much states as you can. Performance tab will show your knowledge graph based on the no of
             times you have visited to a perticular state.
         </div>

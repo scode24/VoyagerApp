@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ScoreService } from 'src/app/services/score.service';
 import { environment } from 'src/environments/environment';
 
@@ -23,6 +24,7 @@ export class MapComponent implements OnInit {
   lastCoordinate: any = null;
   noOfAllowedWrongAttempts = environment.gameConfig.noOfAllowedWrongAttempts;
   noOfAllowedWrongAttemptsBkp = this.noOfAllowedWrongAttempts;
+  scoreDeductBy = environment.gameConfig.scoreDeductBy;
 
   photoData: any;
   photoUrl: any;
@@ -35,7 +37,10 @@ export class MapComponent implements OnInit {
   isNewGame: boolean = false;
   locationNo: number = 1;
 
-  constructor(private httpClient: HttpClient, private changeDetector: ChangeDetectorRef, private scoreService: ScoreService) {
+  constructor(private httpClient: HttpClient,
+    private changeDetector: ChangeDetectorRef,
+    private scoreService: ScoreService,
+    private snackBar: MatSnackBar) {
     this.setUpMap();
   }
 
@@ -86,17 +91,19 @@ export class MapComponent implements OnInit {
     this.changeDetector.detectChanges();
 
     this.isImageLoading = true;
-    this.httpClient.get("https://api.pexels.com/v1/search?query=" + this.correctState + "&per_page=1", {
+    this.httpClient.get("https://api.pexels.com/v1/search?query=" + this.correctState + "&per_page=80", {
       "headers": new HttpHeaders({
         Authorization: environment.gameConfig.pixerKey
       })
     }).subscribe(data => {
       this.photoData = data;
+      index = Math.floor(Math.random() * this.photoData.photos.length);
+      console.log(index);
 
       if (this.photoData.length == 0) {
         this.setQuestion(this.stateList, false, false);
       } else {
-        this.photoUrl = this.photoData.photos[0].src.landscape
+        this.photoUrl = this.photoData.photos[index].src.landscape
         this.isImageLoading = false;
       }
     });
@@ -147,7 +154,9 @@ export class MapComponent implements OnInit {
   checkAnswer(answer: string, coordinate: any) {
     this.answer = answer;
     if (this.answer == this.correctState) {
-      alert("Splendid");
+      this.snackBar.open("Excellent!", "", {
+        duration: 3000
+      });
       this.placeMarker(coordinate, this.lastCoordinate);
       this.lastCoordinate = coordinate;
       this.noOfAllowedWrongAttempts = environment.gameConfig.noOfAllowedWrongAttempts;
@@ -155,7 +164,13 @@ export class MapComponent implements OnInit {
       this.scoreService.setScore(this.score);
 
     } else {
-      alert("OOPS! Wrong answer");
+      this.snackBar.open("OOPS! Wrong answer", "", {
+        duration: 3000
+      });
+      if (this.score >= 3) {
+        this.score -= this.scoreDeductBy;
+        this.scoreService.setScore(this.score);
+      }
       this.noOfAllowedWrongAttempts--;
     }
     this.setQuestion(this.stateList, false, false);
